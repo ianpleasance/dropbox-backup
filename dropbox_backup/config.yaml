@@ -1,9 +1,9 @@
 ---
 name: Dropbox backup
-version: "0.5.7"
+version: "0.6.0"
 slug: dropbox-backup
 description: "Upload your Home Assistant backups to Dropbox"
-url: https://github.com/mikevansighem/dropbox-backup
+url: https://github.com/ianpleasance/dropbox-backup
 init: false
 arch:
   - aarch64
@@ -22,13 +22,17 @@ map:
 
 # Fields available in configuration tab with default values.
 options:
-  oauth_access_token: null
+  app_key: null
+  app_secret: null
+  refresh_token: null
 
 schema:
-  oauth_access_token: str
+  app_key: str
+  app_secret: str
+  refresh_token: str
   output: str?
   keep_last: int(0,)?
   preserve_filename: bool?
 
 # Download location of the package.
-image: "ghcr.io/mikevansighem/dropbox-backup/{arch}"
+image: "ghcr.io/ianpleasance/dropbox-backup/{arch}"

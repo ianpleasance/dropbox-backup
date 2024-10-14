@@ -94,11 +94,15 @@ def make_backup_path(hass_backup_list, output_dir, preserve_filename):
     return upload_list
 
 
-def main(token, output_dir, preserve_filename):
+def main(app_key, app_secret, refresh_token, output_dir, preserve_filename):
 
-    # Check for an access token
-    if (len(token) == 0):
-        sys.exit("[ERROR] Looks like you didn't add your access token.")
+    # Check for the key/secret/token
+    if (len(app_key) == 0):
+        sys.exit("[ERROR] Looks like you didn't add your app client key.")
+    if (len(app_secret) == 0):
+        sys.exit("[ERROR] Looks like you didn't add your app client secret.")
+    if (len(refresh_token) == 0):
+        sys.exit("[ERROR] Looks like you didn't add your refresh token.")
 
     # Get hass headers.
     my_headers = get_headers()
@@ -119,13 +123,13 @@ def main(token, output_dir, preserve_filename):
 
     # Create an instance of a Dropbox class, which can make requests to the API.
     print("[DEBUG] Creating a Dropbox object.")
-    with dropbox.Dropbox(token, timeout=TIMEOUT) as dbx:
+    with dropbox.Dropbox(app_key=app_key, app_secret=app_secret, oauth2_refresh_token=refresh_token, timeout=TIMEOUT) as dbx:
 
         # Check that the access token is valid.
         try:
             dbx.users_get_current_account()
         except AuthError:
-            sys.exit("[ERROR] Invalid access token; try re-generating an access token from the app console on the web.")
+            sys.exit("[ERROR] Invalid refresh token; try re-generating an app secret/refresh token.")
 
         # Upload all files.
         for backup in upload_list:
@@ -138,7 +142,9 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Upload hassio backups.")
 
-    parser.add_argument("token", type=str, help="Dropbox OAuth2 access token.")
+    parser.add_argument("app_key", type=str, help="Dropbox App client key.")
+    parser.add_argument("app_secret", type=str, help="Dropbox App client secret.")
+    parser.add_argument("refresh_token", type=str, help="Dropbox App refresh token.")
     parser.add_argument("output_dir", type=str, help="Output directory.")
     parser.add_argument("preserve_filename", type=str, help="Preserve original backup filename.")
 

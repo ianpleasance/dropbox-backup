@@ -2,8 +2,10 @@
 
 CONFIG_PATH=/data/options.json
 
-# Dropbox authentication token
-TOKEN=$(jq --raw-output ".oauth_access_token" $CONFIG_PATH)
+# Dropbox authentication tokens
+APP_KEY=$(jq --raw-output ".app_key" $CONFIG_PATH)
+APP_SECRET=$(jq --raw-output ".app_secret" $CONFIG_PATH)
+REFRESH_TOKEN=$(jq --raw-output ".refresh_token" $CONFIG_PATH)
 
 # Configuration
 OUTPUT_DIR=$(jq --raw-output ".output // empty" $CONFIG_PATH)
@@ -21,6 +23,7 @@ if [[ -z "$PRESERVE_FILENAME" ]]; then
 fi
 
 echo "[Info] Files will be uploaded to: ${OUTPUT_DIR}"
+echo "[Info] App Key=${APP_KEY} App_Secret=${APP_SECRET} Refresh_token=${REFRESH_TOKEN}"
 echo "[Info] Preserve filenames set to: ${PRESERVE_FILENAME}"
 echo "[Info] Listening for messages via stdin service call..."
 
@@ -32,7 +35,7 @@ while read -r msg; do
     if [[ $cmd = "upload" ]]; then
 
         # Upload files
-        python3 /upload.py "$TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
+        python3 /upload.py "$APP_KEY" "$APP_SECRET" "REFRESH_$TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
 
         # Remove stale backups
         if [[ "$KEEP_LAST" ]]; then
