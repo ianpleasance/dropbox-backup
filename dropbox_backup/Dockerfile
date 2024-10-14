@@ -1,5 +1,5 @@
 # Set build env
-ARG BUILD_FROM=ghcr.io/hassio-addons/base/amd64:10.2.3
+ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
 # Add env
