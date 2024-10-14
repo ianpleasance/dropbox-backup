@@ -35,4 +35,4 @@ schema:
   preserve_filename: bool?
 
 # Download location of the package.
-image: "ghcr.io/ianpleasance/dropbox-backup/{arch}"
+#image: "ghcr.io/ianpleasance/dropbox-backup/{arch}"

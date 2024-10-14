@@ -21,11 +21,11 @@ LABEL \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
-    maintainer="Mike van Sighem <mikevansighem@gmail.com>" \
+    maintainer="Ian Pleasance <ianpleasance@gmail.com>" \
     org.opencontainers.image.title="${BUILD_NAME}" \
     org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
-    org.opencontainers.image.vendor="Mike`s Home Assistant Add-on" \
-    org.opencontainers.image.authors="Mike van Sighem <mikevansighem@gmail.com>" \
+    org.opencontainers.image.vendor="Ian`s Home Assistant Add-on" \
+    org.opencontainers.image.authors="Ian Pleasance <ianpleasance@gmail.com>" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.url="https://github.com/${BUILD_REPOSITORY}" \
     org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
