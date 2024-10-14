@@ -36,8 +36,8 @@ LABEL \
 
 # Install dependancies
 COPY requirements.txt /
-RUN apk add --no-cache findutils python3 python3-dev py3-pip && \
-    pip3 install --no-cache-dir -r requirements.txt
+RUN apk add --no-cache findutils python3 python3-dev py3-pip 
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy Python files
 COPY keep_last.py /
