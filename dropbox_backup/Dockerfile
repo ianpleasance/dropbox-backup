@@ -34,6 +34,9 @@ LABEL \
     org.opencontainers.image.revision=${BUILD_REF} \
     org.opencontainers.image.version=${BUILD_VERSION}
 
+# Adding this as a workaround for my unusual dns configuration
+RUN echo "nameserver 8.8.8.8" >/etc/resolv.conf
+
 # Install dependancies
 COPY requirements.txt /
 RUN apk add --no-cache findutils=4.8.0-r1 py3-pip=20.3.4-r1
@@ -42,9 +45,6 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy Python files
 COPY keep_last.py /
 COPY upload.py /
-
-# Adding this as a workaround for my unusual dns configuration
-RUN echo "nameserver 8.8.8.8" >/etc/resolv.conf
 
 # Copy run and allow to execute
 COPY run.sh /
