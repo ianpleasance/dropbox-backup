@@ -149,4 +149,5 @@ if __name__ == '__main__':
     parser.add_argument("preserve_filename", type=str, help="Preserve original backup filename.")
 
     args = parser.parse_args()
-    main(args.token, args.output_dir, args.preserve_filename)
+    main(app_key, app_secret, refresh_token, output_dir, preserve_filename)
+
