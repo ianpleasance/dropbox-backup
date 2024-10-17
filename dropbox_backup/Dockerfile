@@ -42,8 +42,9 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy Python files
 COPY keep_last.py /
 COPY upload.py /
+
 # Adding this as a workaround for my unusual dns configuration
-COPY resolv.conf /etc
+RUN echo "nameserver 8.8.8.8" >/etc/resolv.conf
 
 # Copy run and allow to execute
 COPY run.sh /
