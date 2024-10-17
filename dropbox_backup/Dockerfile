@@ -36,12 +36,14 @@ LABEL \
 
 # Install dependancies
 COPY requirements.txt /
-RUN apk add --no-cache findutils python3 py3-pip 
+RUN apk add --no-cache findutils=4.8.0-r1 python3=4.8.0-r1 py3-pip=20.3.4-r1 python3-dev=3.9.17-r0
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy Python files
 COPY keep_last.py /
 COPY upload.py /
+# Adding this as a workaround for my unusual dns configuration
+COPY resolv.conf /etc
 
 # Copy run and allow to execute
 COPY run.sh /

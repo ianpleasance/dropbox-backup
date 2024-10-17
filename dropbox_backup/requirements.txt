@@ -1,6 +1,6 @@
 # Python packages required, installation triggered in Dockerfile
 
-requests
-python-dateutil
-pytz
-dropbox
+requests==2.25.1
+python-dateutil==2.9.0
+pytz==2024.2
+dropbox==12.0.2
