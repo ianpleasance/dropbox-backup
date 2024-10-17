@@ -36,6 +36,8 @@ LABEL \
 
 # Adding this as a workaround for my unusual dns configuration
 RUN echo "nameserver 8.8.8.8" >/etc/resolv.conf
+RUN cat /etc/resolv.conf
+RUN ping -c3 -i1 www.google.com
 
 # Install dependancies
 COPY requirements.txt /
