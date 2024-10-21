@@ -11,6 +11,7 @@ REFRESH_TOKEN=$(jq --raw-output ".refresh_token" $CONFIG_PATH)
 OUTPUT_DIR=$(jq --raw-output ".output // empty" $CONFIG_PATH)
 KEEP_LAST=$(jq --raw-output ".keep_last // empty" $CONFIG_PATH)
 PRESERVE_FILENAME=$(jq --raw-output ".preserve_filename // empty" $CONFIG_PATH)
+DEBUG_INFO=$(jq --raw-output ".debug_info // empty" $CONFIG_PATH)
 
 # Check if empty otherwise set default
 if [[ -z "$OUTPUT_DIR" ]]; then
@@ -22,10 +23,14 @@ if [[ -z "$PRESERVE_FILENAME" ]]; then
     PRESERVE_FILENAME=false
 fi
 
+echo "[Info] Debug Information set to: ${DEBUG_INFO}"
 echo "[Info] Files will be uploaded to: ${OUTPUT_DIR}"
-echo "[Info] App Key=${APP_KEY} App_Secret=${APP_SECRET} Refresh_token=${REFRESH_TOKEN}"
 echo "[Info] Keep last ${KEEP_LAST} backups"
 echo "[Info] Preserve filenames set to: ${PRESERVE_FILENAME}"
+if [ ${DEBUG_INFO} = "true" ]
+  then
+    echo "[Info] App Key=${APP_KEY} App_Secret=${APP_SECRET} Refresh_token=${REFRESH_TOKEN}"
+fi
 echo "[Info] Listening for messages via stdin service call..."
 
 # listen for input
@@ -36,13 +41,20 @@ while read -r msg; do
     if [[ $cmd = "upload" ]]; then
 
         # Upload files
-        echo /upload.py "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
-        python3 /upload.py "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
+        if [ ${DEBUG_INFO} = "true" ] 
+          then
+            echo python3 /upload.py "$DEBUG_INFO" "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
+        fi
+        python3 /upload.py "$DEBUG_INFO" "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
 
         # Remove stale backups
         if [[ "$KEEP_LAST" ]]; then
             echo "[Info] Keep last option is set, cleaning up files..."
-            python3 /keep_last.py "$KEEP_LAST"
+            if [ ${DEBUG_INFO} = "true" ]
+              then
+                echo python3 /keep_last.py "$DEBUG_INFO" "$KEEP_LAST"
+            fi
+            python3 /keep_last.py "$DEBUG_INFO" "$KEEP_LAST"
         fi
 
     else

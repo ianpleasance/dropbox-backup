@@ -33,6 +33,7 @@ schema:
   output: str?
   keep_last: int(0,)?
   preserve_filename: bool?
+  debug_info: bool?
 
 # Download location of the package.
 #image: "ghcr.io/ianpleasance/dropbox-backup/{arch}"

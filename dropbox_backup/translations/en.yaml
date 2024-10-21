@@ -25,3 +25,8 @@ configuration:
   preserve_filename:
     name: Preserve filename.
     description: Preserve original backup filename.
+
+  debug_info:
+    name: Show Debugging
+    description: Show debugging information
+

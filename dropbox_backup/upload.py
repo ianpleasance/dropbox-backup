@@ -20,7 +20,7 @@ def get_headers():
 
 
 # Uploads a file to Dropbox
-def upload_file(dbx, file, target):
+def upload_file(debug_info, dbx, file, target):
 
     # Open the file
     with open(file, 'rb') as f:
@@ -33,15 +33,15 @@ def upload_file(dbx, file, target):
 
             # Use normal upload method if file is small.
             if file_size <= CHUNK_SIZE:
-
-                print("[DEBUG] Using simple uploader.")
+                if debug_info is True:
+                  print("[DEBUG] Using simple uploader.")
 
                 # Use normal upload method if file is small.
                 dbx.files_upload(f.read(), target, mode=WriteMode('add'))
 
             else:
-
-                print("[DEBUG] Using upload session.")
+                if debug_info is True:
+                  print("[DEBUG] Using upload session.")
 
                 upload_session_start_result = dbx.files_upload_session_start(f.read(CHUNK_SIZE))
                 cursor = dropbox.files.UploadSessionCursor(session_id=upload_session_start_result.session_id, offset=f.tell())
@@ -50,14 +50,17 @@ def upload_file(dbx, file, target):
                 while f.tell() < file_size:
 
                     if (file_size - f.tell()) <= CHUNK_SIZE:
-#                       print("Last chunk %s" % (file_size - f.tell()))
+                        if debug_info is True:
+                          print("[DEBUG] Last chunk %s" % (file_size - f.tell()))
                         dbx.files_upload_session_finish(f.read(CHUNK_SIZE), cursor, commit)
 
-                    else:
-#                       print("Not last chunk %s" % (file_size - f.tell()))
+                    else: 
+                        if debug_info is True:
+                          print("[DEBUG] Not last chunk %s" % (file_size - f.tell()))
                         dbx.files_upload_session_append(f.read(CHUNK_SIZE), cursor.session_id, cursor.offset)
                         cursor.offset = f.tell()
-#                       print("Cursor offset = %s" % (f.tell()))
+                        if debug_info is True:
+                          print("[DEBUG] Cursor offset = %s" % (f.tell()))
 
         except ApiError as err:
             # This checks for the specific error where a user doesn't have
@@ -88,7 +91,7 @@ def make_backup_path(hass_backup_list, output_dir, preserve_filename):
         if preserve_filename is True:
             target = hass_backup['slug'] + ".tar"
         else:
-            target = hass_backup['name'] + ".tar"
+            target = hass_backup['name'] + '-' + hass_backup['date'] + ".tar"
 
         # Add target folder to path
         target = os.path.join(output_dir, target)
@@ -100,7 +103,7 @@ def make_backup_path(hass_backup_list, output_dir, preserve_filename):
     return upload_list
 
 
-def main(app_key, app_secret, refresh_token, output_dir, preserve_filename):
+def main(debug_info, app_key, app_secret, refresh_token, output_dir, preserve_filename):
 
     # Check for the key/secret/token
     if (len(app_key) == 0):
@@ -117,7 +120,9 @@ def main(app_key, app_secret, refresh_token, output_dir, preserve_filename):
     backup_info = requests.get(BASE_URL + "backups", headers=my_headers)
     backup_info.raise_for_status()
     hass_backup_list = backup_info.json()["data"]["backups"]
-    pprint(hass_backup_list)
+    if debug_info is True:
+      print("[DEBUG] hass_backup_list follows ...")
+      pprint(hass_backup_list)
 
     # Format the file paths
     upload_list = make_backup_path(hass_backup_list, output_dir, preserve_filename)
@@ -129,7 +134,8 @@ def main(app_key, app_secret, refresh_token, output_dir, preserve_filename):
         print("[INFO] Found", len(upload_list), "file(s) to upload.")
 
     # Create an instance of a Dropbox class, which can make requests to the API.
-    print("[DEBUG] Creating a Dropbox object. app_key=%s app_secret=%s oauth2_refresh_token=%s" % (app_key,app_secret,refresh_token))
+    if debug_info is True:
+      print("[DEBUG] Creating a Dropbox object. app_key=%s app_secret=%s oauth2_refresh_token=%s" % (app_key,app_secret,refresh_token))
     with dropbox.Dropbox(app_key=app_key, app_secret=app_secret, oauth2_refresh_token=refresh_token, timeout=TIMEOUT) as dbx:
 
         # Check that the access token is valid.
@@ -140,7 +146,7 @@ def main(app_key, app_secret, refresh_token, output_dir, preserve_filename):
 
         # Upload all files.
         for backup in upload_list:
-            upload_file(dbx, backup['source'], backup['target'])
+            upload_file(debug_info, dbx, backup['source'], backup['target'])
 
         print("[INFO] Completed upload(s).")
 
@@ -149,6 +155,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Upload hassio backups.")
 
+    parser.add_argument("debug_info", type=str, help="Debugging info.")
     parser.add_argument("app_key", type=str, help="Dropbox App client key.")
     parser.add_argument("app_secret", type=str, help="Dropbox App client secret.")
     parser.add_argument("refresh_token", type=str, help="Dropbox App refresh token.")
@@ -156,5 +163,5 @@ if __name__ == '__main__':
     parser.add_argument("preserve_filename", type=str, help="Preserve original backup filename.")
 
     args = parser.parse_args()
-    main(args.app_key, args.app_secret, args.refresh_token, args.output_dir, args.preserve_filename)
+    main(args.debug_info, args.app_key, args.app_secret, args.refresh_token, args.output_dir, args.preserve_filename)
 
