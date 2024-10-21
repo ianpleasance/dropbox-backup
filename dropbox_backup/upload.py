@@ -7,6 +7,8 @@ import dropbox
 from dropbox.files import WriteMode
 from dropbox.exceptions import ApiError, AuthError
 
+from pprint import pprint
+
 TIMEOUT = 900
 CHUNK_SIZE = 4 * 1024 * 1024
 BASE_URL = "http://hassio/"
@@ -48,11 +50,14 @@ def upload_file(dbx, file, target):
                 while f.tell() < file_size:
 
                     if (file_size - f.tell()) <= CHUNK_SIZE:
+                        print("Last chunk %s" % (file_size - f.tell()))
                         dbx.files_upload_session_finish(f.read(CHUNK_SIZE), cursor, commit)
 
                     else:
+                        print("Not last chunk %s" % (file_size - f.tell()))
                         dbx.files_upload_session_append(f.read(CHUNK_SIZE), cursor.session_id, cursor.offset)
                         cursor.offset = f.tell()
+                        print("Cursor offset = %s" % (f.tell()))
 
         except ApiError as err:
             # This checks for the specific error where a user doesn't have
@@ -111,6 +116,7 @@ def main(app_key, app_secret, refresh_token, output_dir, preserve_filename):
     backup_info = requests.get(BASE_URL + "backups", headers=my_headers)
     backup_info.raise_for_status()
     hass_backup_list = backup_info.json()["data"]["backups"]
+    pprint(hass_backup_list)
 
     # Format the file paths
     upload_list = make_backup_path(hass_backup_list, output_dir, preserve_filename)
