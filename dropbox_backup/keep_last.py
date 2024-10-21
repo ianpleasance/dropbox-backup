@@ -50,12 +50,12 @@ def delete_backup(stale_backups, headers):
 
         # Print message based on response.
         if res.ok:
-            print("[Info] Deleted backup {}".format(backup["name"]))
+            print("[INFO] Deleted backup {}".format(backup["name"]))
             continue
 
         else:
             # log an error
-            print("[Error] Failed to delete backup {}: {}".format(
+            print("[ERROR] Failed to delete backup {}: {}".format(
                 backup["name"], res.status_code))
 
 

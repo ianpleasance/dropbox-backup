@@ -23,33 +23,38 @@ if [[ -z "$PRESERVE_FILENAME" ]]; then
     PRESERVE_FILENAME=false
 fi
 
-echo "[Info] Debug Information set to: ${DEBUG_INFO}"
-echo "[Info] Files will be uploaded to: ${OUTPUT_DIR}"
-echo "[Info] Keep last ${KEEP_LAST} backups"
-echo "[Info] Preserve filenames set to: ${PRESERVE_FILENAME}"
+# Check if empty otherwise set default
+if [[ -z "$DEBUG_INFO" ]]; then
+    DEBUG_INFO=false
+fi
+
+echo "[INFO] Debug Information set to: ${DEBUG_INFO}"
+echo "[INFO] Files will be uploaded to: ${OUTPUT_DIR}"
+echo "[INFO] Keep last ${KEEP_LAST} backups"
+echo "[INFO] Preserve filenames set to: ${PRESERVE_FILENAME}"
 if [ ${DEBUG_INFO} = "true" ]
   then
     echo "[DEBUG] App Key=${APP_KEY} App_Secret=${APP_SECRET} Refresh_token=${REFRESH_TOKEN}"
 fi
-echo "[Info] Listening for messages via stdin service call..."
+echo "[INFO] Listening for messages via stdin service call..."
 
 # listen for input
 while read -r msg; do
     # parse JSON
     cmd="$(echo "$msg" | jq --raw-output '.command')"
-    echo "[Info] Received message with command ${cmd}"
+    echo "[INFO] Received message with command ${cmd}"
     if [[ $cmd = "upload" ]]; then
 
         # Upload files
         if [ ${DEBUG_INFO} = "true" ] 
           then
-            echo "[DEBUG] python3 /upload.py ${DEBUG_INFO} ${APP_KEY} ${$APP_SECRET} ${REFRESH_TOKEN} ${OUTPUT_DIR} ${PRESERVE_FILENAME}"
+            echo "[DEBUG] python3 /upload.py ${DEBUG_INFO} ${APP_KEY} ${APP_SECRET} ${REFRESH_TOKEN} ${OUTPUT_DIR} ${PRESERVE_FILENAME}"
         fi
         python3 /upload.py "$DEBUG_INFO" "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
 
         # Remove stale backups
         if [[ "$KEEP_LAST" ]]; then
-            echo "[Info] Keep last option is set, cleaning up files..."
+            echo "[INFO] Keep last option is set, cleaning up files..."
             if [ ${DEBUG_INFO} = "true" ]
               then
                 echo "[DEBUG] python3 /keep_last.py ${DEBUG_INFO} ${KEEP_LAST}"
@@ -59,7 +64,7 @@ while read -r msg; do
 
     else
         # received undefined command
-        echo "[Error] Command not found: ${cmd}"
+        echo "[ERROR] Command not found: ${cmd}"
     fi
 
 done
