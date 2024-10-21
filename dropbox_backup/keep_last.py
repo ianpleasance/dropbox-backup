@@ -45,9 +45,9 @@ def delete_backup(debug_info, stale_backups, headers):
 
         # call hassio API deletion
         if debug_info is True:
-          print("[DEBUG] Deleting %s" % (BASE_URL + "snapshots/" + backup["slug"] + "/remove"))
-        res = requests.post(
-            BASE_URL + "snapshots/" + backup["slug"] + "/remove",
+          print("[DEBUG] Deleting %s" % (BASE_URL + "backups/" + backup["slug"]))
+        res = requests.delete(
+            BASE_URL + "backups/" + backup["slug"],
             headers=headers)
 
         # Print message based on response.
