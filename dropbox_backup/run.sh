@@ -24,6 +24,7 @@ fi
 
 echo "[Info] Files will be uploaded to: ${OUTPUT_DIR}"
 echo "[Info] App Key=${APP_KEY} App_Secret=${APP_SECRET} Refresh_token=${REFRESH_TOKEN}"
+echo "[Info] Keep last ${KEEP_LAST} backups"
 echo "[Info] Preserve filenames set to: ${PRESERVE_FILENAME}"
 echo "[Info] Listening for messages via stdin service call..."
 
@@ -35,6 +36,7 @@ while read -r msg; do
     if [[ $cmd = "upload" ]]; then
 
         # Upload files
+        echo /upload.py "$APP_KEY" "$APP_SECRET" "$REFRESH_$TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
         python3 /upload.py "$APP_KEY" "$APP_SECRET" "$REFRESH_$TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
 
         # Remove stale backups
