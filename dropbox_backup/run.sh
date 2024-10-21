@@ -36,8 +36,8 @@ while read -r msg; do
     if [[ $cmd = "upload" ]]; then
 
         # Upload files
-        echo /upload.py "$APP_KEY" "$APP_SECRET" "$REFRESH_$TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
-        python3 /upload.py "$APP_KEY" "$APP_SECRET" "$REFRESH_$TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
+        echo /upload.py "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
+        python3 /upload.py "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
 
         # Remove stale backups
         if [[ "$KEEP_LAST" ]]; then
