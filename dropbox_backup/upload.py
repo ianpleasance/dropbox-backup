@@ -122,7 +122,7 @@ def main(app_key, app_secret, refresh_token, output_dir, preserve_filename):
         print("[INFO] Found", len(upload_list), "file(s) to upload.")
 
     # Create an instance of a Dropbox class, which can make requests to the API.
-    print("[DEBUG] Creating a Dropbox object.")
+    print("[DEBUG] Creating a Dropbox object. app_key=%s app_secret=%s oauth2_refresh_token=%s" % (app_key,app_secret,oauth2_refresh_token))
     with dropbox.Dropbox(app_key=app_key, app_secret=app_secret, oauth2_refresh_token=refresh_token, timeout=TIMEOUT) as dbx:
 
         # Check that the access token is valid.
