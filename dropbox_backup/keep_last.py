@@ -39,24 +39,25 @@ def stale_only(backups, number_to_keep):
 
 
 # Delete backups
-def delete_backup(stale_backups, headers):
+def delete_backup(debug_info, stale_backups, headers):
 
     for backup in stale_backups:
 
         # call hassio API deletion
+        if debug_info is True:
+          print("[DEBUG] Deleting %s" % (BASE_URL + "snapshots/" + backup["slug"] + "/remove"))
         res = requests.post(
             BASE_URL + "snapshots/" + backup["slug"] + "/remove",
             headers=headers)
 
         # Print message based on response.
         if res.ok:
-            print("[INFO] Deleted backup {}".format(backup["name"]))
+            print("[INFO] Deleted backup %s %s" % (backup["name"], backup["slug"]))
             continue
 
         else:
             # log an error
-            print("[ERROR] Failed to delete backup {}: {}".format(
-                backup["name"], res.status_code))
+            print("[ERROR] Failed to delete backup %s %s" % (backup["name"], backup["slug"]))
 
 
 def main(debug_info, number_to_keep):
@@ -75,7 +76,7 @@ def main(debug_info, number_to_keep):
     stale_backups = stale_only(backups, number_to_keep)
 
     # Delete all stale backups
-    delete_backup(stale_backups, my_headers)
+    delete_backup(debug_info, stale_backups, my_headers)
 
 
 if __name__ == "__main__":
