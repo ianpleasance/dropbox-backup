@@ -80,7 +80,7 @@ def main(number_to_keep):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Remove old hassio backups.")
-    parser.add_argument("debug_info", type=int, help="Debugging On.")
+    parser.add_argument("debug_info", type=str, help="Debugging On.")
     parser.add_argument("number", type=int, help="Number of backups to keep.")
     args = parser.parse_args()
     main(args.debug_info, args.number)

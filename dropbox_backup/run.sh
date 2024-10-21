@@ -29,7 +29,7 @@ echo "[Info] Keep last ${KEEP_LAST} backups"
 echo "[Info] Preserve filenames set to: ${PRESERVE_FILENAME}"
 if [ ${DEBUG_INFO} = "true" ]
   then
-    echo "[Info] App Key=${APP_KEY} App_Secret=${APP_SECRET} Refresh_token=${REFRESH_TOKEN}"
+    echo "[DEBUG] App Key=${APP_KEY} App_Secret=${APP_SECRET} Refresh_token=${REFRESH_TOKEN}"
 fi
 echo "[Info] Listening for messages via stdin service call..."
 
@@ -43,7 +43,7 @@ while read -r msg; do
         # Upload files
         if [ ${DEBUG_INFO} = "true" ] 
           then
-            echo python3 /upload.py "$DEBUG_INFO" "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
+            echo "[DEBUG] python3 /upload.py ${DEBUG_INFO} ${APP_KEY} ${$APP_SECRET} ${REFRESH_TOKEN} ${OUTPUT_DIR} ${PRESERVE_FILENAME}"
         fi
         python3 /upload.py "$DEBUG_INFO" "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
 
@@ -52,7 +52,7 @@ while read -r msg; do
             echo "[Info] Keep last option is set, cleaning up files..."
             if [ ${DEBUG_INFO} = "true" ]
               then
-                echo python3 /keep_last.py "$DEBUG_INFO" "$KEEP_LAST"
+                echo "[DEBUG] python3 /keep_last.py ${DEBUG_INFO} ${KEEP_LAST}"
             fi
             python3 /keep_last.py "$DEBUG_INFO" "$KEEP_LAST"
         fi
