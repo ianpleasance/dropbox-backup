@@ -59,7 +59,7 @@ def delete_backup(stale_backups, headers):
                 backup["name"], res.status_code))
 
 
-def main(number_to_keep):
+def main(debug_info, number_to_keep):
 
     my_headers = get_headers()
 
