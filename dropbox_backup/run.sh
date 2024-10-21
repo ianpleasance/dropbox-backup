@@ -48,18 +48,18 @@ while read -r msg; do
         # Upload files
         if [ ${DEBUG_INFO} = "true" ] 
           then
-            echo "[DEBUG] python3 /upload.py ${DEBUG_INFO} ${APP_KEY} ${APP_SECRET} ${REFRESH_TOKEN} ${OUTPUT_DIR} ${PRESERVE_FILENAME}"
+            echo "[DEBUG] python3 -u /upload.py ${DEBUG_INFO} ${APP_KEY} ${APP_SECRET} ${REFRESH_TOKEN} ${OUTPUT_DIR} ${PRESERVE_FILENAME}"
         fi
-        python3 /upload.py "$DEBUG_INFO" "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
+        python3 /upload.py -u "$DEBUG_INFO" "$APP_KEY" "$APP_SECRET" "$REFRESH_TOKEN" "$OUTPUT_DIR" "$PRESERVE_FILENAME"
 
         # Remove stale backups
         if [[ "$KEEP_LAST" ]]; then
             echo "[INFO] Keep last option is set, cleaning up files..."
             if [ ${DEBUG_INFO} = "true" ]
               then
-                echo "[DEBUG] python3 /keep_last.py ${DEBUG_INFO} ${KEEP_LAST}"
+                echo "[DEBUG] python3 -u /keep_last.py ${DEBUG_INFO} ${KEEP_LAST}"
             fi
-            python3 /keep_last.py "$DEBUG_INFO" "$KEEP_LAST"
+            python3 /keep_last.py -u "$DEBUG_INFO" "$KEEP_LAST"
         fi
 
     else
