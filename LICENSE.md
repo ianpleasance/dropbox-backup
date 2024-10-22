@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2021 Mike van Sighem
+Copyright (c) 2024 Ian Pleasance
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ## References
+
+Initially written and maintained by Mike van Sighem (https://github.com/mikevansighem) up to and including version 0.5.7
 
 Original work on [Hassio Dropbox sync](https://github.com/danielwelch/hassio-dropbox-sync) copyright (c) 2018 Daniel Welch covered under [Apache License 2.0](https://github.com/danielwelch/hassio-dropbox-sync/blob/master/LICENSE).
 
