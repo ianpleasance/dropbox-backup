@@ -111,6 +111,8 @@ time intervals, under certain conditions, etc.
 A sample automation can be found [here](DOCS/sample_automation.md). To use it
 simply create a new automation and copy the YAML.
 
+Note, the addon will upload all backup files to Dropbox even if they have previously been uploaded - there is no attempt to skip ones that already exist, it will overwrite them as new versions. As such the suggestion is to set keep_last to a low value (1 or 2).
+
 ## 📝 License
 
 This add-on is covered under the MIT license refer to [LICENSE.md](LICENSE.md)
